@@ -54,8 +54,13 @@ mod tests {
 	fn it_works() {
 		let _t = Authako::new();
 		let  p = Permission::Create | Permission::Update;
-		let  r1= Resource::new(String::from("useres"),p);
-		let  r2= Resource::new(String::from("useres"),p);
+		let  r1= Resource::new("useres",p);
+		let  r2= Resource::new("useres",p);
 		let _a = Authorization::new(0,0,vec![r1,r2]);
+                let _s = match _a.get_resource("useres") {
+                    Some(_p) => _p.have_right(p),
+                    None     => false,
+                };
+                assert_eq!(_s,true);
 	}
 }

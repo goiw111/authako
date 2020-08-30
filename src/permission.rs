@@ -1,4 +1,4 @@
-use std::ops::BitOr;
+use std::ops::{BitOr, BitAnd};
 
 pub enum Permission {
     Create = 0b0001,
@@ -11,7 +11,14 @@ pub enum Permission {
 impl BitOr for Permission {
     type Output = u8;
 
-    fn bitor(self, rhs: Self) -> u8 {
+    fn bitor(self, rhs: Self) -> Self::Output {
         self as u8 | rhs as u8
+    }
+}
+
+impl BitAnd for Permission {
+    type Output = u8;
+    fn bitand(self, rhs: Self) -> Self::Output {
+        self as u8 & rhs as u8
     }
 }

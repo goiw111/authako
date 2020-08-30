@@ -12,8 +12,19 @@ pub struct Resource{
 }
 
 impl Resource {
-    pub fn new(name:    String, permission: u8)
-        -> Resource {Resource {name,permission,}}
+    pub fn new(name: &str, permission: u8)
+        -> Resource {Resource {
+            name:   String::from(name),
+            permission,}
+    }
+
+    pub fn get_right(&self) -> &u8 {
+        &self.permission
+    }
+
+    pub fn have_right(&self, rt: u8) -> bool {
+        (self.get_right() & rt) == rt
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
@@ -34,14 +45,14 @@ impl Authorization {
             }
     }
 
-    pub fn get_resource(&self, name: &String) 
-        -> Result<&Resource, &'static str> {
-        for i in self.resources.iter() {
-           if i.name.eq(name){
-              return Ok(i);
+    pub fn get_resource(&self,name: &str)
+        -> Option<&Resource> {
+        for r in self.resources.iter() {
+           if r.name.eq(&String::from(name)){
+              return Some(r);
            }
         }
-        Err("you don't have authorization for that resource")
+        None
     }
 
     pub fn get_token(&self)
